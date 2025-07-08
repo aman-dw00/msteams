@@ -1,0 +1,28 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanagerConfig
+metadata:
+  name: zodiac
+  namespace: monitoring
+spec:
+  receivers:
+  - msteams_configs:
+    - send_resolved: true
+      webhook_url: https://prod-239.westeurope.logic.azure.com:443/workflows/5de8d808007c403ea15bdd9f03f9fe99/triggers/manual/paths/invoke?api-version=2016-06-01
+    name: high_priority_alert
+  route:
+    group_by:
+    - job
+    - alertname
+    - severity
+    group_interval: 5m
+    group_wait: 30s
+    receiver: high_priority_alert
+    repeat_interval: 24h
+    routes:
+    - continue: true
+      matchers:
+      - severity =~ "warning|critical"
+      - channel = msteams
+      - team = zodiac
+      - bu = zodiac
+      receiver: high_priority_alert
