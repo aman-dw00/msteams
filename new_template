@@ -5,10 +5,10 @@
   "body": [
     {
       "type": "TextBlock",
-      "text": "@{triggerBody()?['title']}",
+      "text": "${title}",
       "weight": "Bolder",
       "size": "Large",
-      "color": "@{if(contains(triggerBody()?['title'], 'FIRING'), 'attention', if(contains(triggerBody()?['title'], 'RESOLVED'), 'good', 'default'))}",
+      "color": "${if(contains(title, 'FIRING'), 'attention', if(contains(title, 'RESOLVED'), 'good', 'default'))}",
       "wrap": true
     },
     {
@@ -22,39 +22,28 @@
     },
     {
       "type": "TextBlock",
-      "text": "@{replace(replace(replace(triggerBody()?['text'], '\nLabels:', '\n\n🔹 **Labels:**\n'), '\nAnnotations:', '\n\n📝 **Annotations:**\n'), '\nSource:', '\n\n🔗 **Source:** ')}",
+      "text": "${replace(replace(replace(text, '\nLabels:', '\n\n🔹 **Labels:**\n'), '\nAnnotations:', '\n\n📝 **Annotations:**\n'), '\nSource:', '\n\n🔗 **Source:** ')}",
       "wrap": true,
       "spacing": "Medium"
+    },
+    {
+      "type": "TextBlock",
+      "text": "**${count(split(text, 'Source:')) - 1} active alerts** found",
+      "wrap": true,
+      "spacing": "Medium",
+      "color": "attention"
     }
   ],
   "actions": [
     {
       "type": "Action.OpenUrl",
-      "title": "🔗 View Primary Alert",
-      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 1), split(triggerBody()?['text'], 'Source: ')[1], 'https://example.com')}"
+      "title": "📋 Open Primary Alert",
+      "url": "${if(count(split(text, 'Source:')) > 1, trim(split(text, 'Source:')[1]), 'https://grafana.example.com')}"
     },
     {
       "type": "Action.OpenUrl",
-      "title": "🔗 View Additional Alerts (1)",
-      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 2), split(triggerBody()?['text'], 'Source: ')[2], 'https://example.com')}",
-      "visible": "@{greater(length(split(triggerBody()?['text'], 'Source: ')), 2)}"
-    },
-    {
-      "type": "Action.OpenUrl",
-      "title": "🔗 View Additional Alerts (2)",
-      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 3), split(triggerBody()?['text'], 'Source: ')[3], 'https://example.com')}",
-      "visible": "@{greater(length(split(triggerBody()?['text'], 'Source: ')), 3)}"
-    },
-    {
-      "type": "Action.OpenUrl",
-      "title": "🔗 View Additional Alerts (3)",
-      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 4), split(triggerBody()?['text'], 'Source: ')[4], 'https://example.com')}",
-      "visible": "@{greater(length(split(triggerBody()?['text'], 'Source: ')), 4)}"
-    },
-    {
-      "type": "Action.OpenUrl",
-      "title": "📋 View All in Grafana",
-      "url": "YOUR_GRAFANA_DASHBOARD_URL"
+      "title": "📋 Open Grafana Dashboard",
+      "url": "https://grafana.example.com/dashboards"
     }
   ]
 }
