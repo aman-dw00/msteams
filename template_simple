@@ -34,7 +34,7 @@
     },
     {
       "type": "TextBlock",
-      "text": "**📄 Summary:**\n@{triggerBody()?['title'] ?? 'N/A'}",
+      "text": "**📄 Summary:**\n@{triggerBody()?['title']}",
       "wrap": true,
       "spacing": "Small"
     },
@@ -46,22 +46,13 @@
     },
     {
       "type": "TextBlock",
-      "text": "**🔍 Details:**\n"
-        + "• alertname = @{coalesce(split(triggerBody()?['text'], 'alertname = ')[1]?split('\n')[0], 'N/A')}\n"
-        + "• severity = @{coalesce(split(triggerBody()?['text'], 'severity = ')[1]?split('\n')[0], 'N/A')}\n"
-        + "• namespace = @{coalesce(split(triggerBody()?['text'], 'namespace = ')[1]?split('\n')[0], 'N/A')}\n"
-        + "• pod = @{coalesce(split(triggerBody()?['text'], 'pod = ')[1]?split('\n')[0], 'N/A')}\n"
-        + "• team = @{coalesce(split(triggerBody()?['text'], 'team = ')[1]?split('\n')[0], 'N/A')}\n"
-        + "• env = @{coalesce(split(triggerBody()?['text'], 'channel = ')[1]?split('\n')[0], 'N/A')}",
+      "text": "**🔍 Details:**\n• alertname = @{coalesce(split(triggerBody()?['text'], 'alertname = ')[1]?split('\n')[0], 'N/A')}\n• severity = @{coalesce(split(triggerBody()?['text'], 'severity = ')[1]?split('\n')[0], 'N/A')}\n• namespace = @{coalesce(split(triggerBody()?['text'], 'namespace = ')[1]?split('\n')[0], 'N/A')}\n• pod = @{coalesce(split(triggerBody()?['text'], 'pod = ')[1]?split('\n')[0], 'N/A')}\n• team = @{coalesce(split(triggerBody()?['text'], 'team = ')[1]?split('\n')[0], 'N/A')}\n• env = @{coalesce(split(triggerBody()?['text'], 'channel = ')[1]?split('\n')[0], 'N/A')}",
       "wrap": true,
       "spacing": "Small"
     },
     {
       "type": "TextBlock",
-      "text": "**📝 Annotations:**\n"
-        + "• dashboard: @{triggerBody()?['annotations']?['dashboard_url'] ?? 'N/A'}\n"
-        + "• runbook: @{triggerBody()?['annotations']?['runbook_url'] ?? 'N/A'}\n"
-        + "• description: @{triggerBody()?['annotations']?['description'] ?? 'N/A'}",
+      "text": "**📝 Annotations:**\n• dashboard: @{triggerBody()?['annotations']?['dashboard_url'] ?? 'N/A'}\n• runbook: @{triggerBody()?['annotations']?['runbook_url'] ?? 'N/A'}\n• description: @{triggerBody()?['annotations']?['description'] ?? 'N/A'}",
       "wrap": true,
       "spacing": "Small"
     }
