@@ -25,7 +25,7 @@
   "body": [
     {
       "type": "TextBlock",
-      "text": "🔥 @{triggerBody()?['title'] ?? 'N/A Alert Title'}",
+      "text": "🔥 @{triggerBody()?['title']}",
       "wrap": true,
       "weight": "Bolder",
       "size": "Large",
@@ -34,99 +34,34 @@
     },
     {
       "type": "TextBlock",
-      "text": "**📄 Summary:**\n@{triggerBody()?['title'] ?? 'No summary provided.'}",
+      "text": "**📄 Summary:**\n@{triggerBody()?['title'] ?? 'N/A'}",
       "wrap": true,
       "spacing": "Small"
     },
     {
       "type": "TextBlock",
-      "text": "**📊 Status:** FIRING",
-      "wrap": true,
-      "spacing": "Small",
-      "color": "Attention"
-    },
-    {
-      "type": "TextBlock",
-      "text": "**🔍 Details:**",
-      "wrap": true,
-      "spacing": "Small",
-      "weight": "Bolder"
-    },
-    {
-      "type": "ColumnSet",
-      "columns": [
-        {
-          "type": "Column",
-          "width": "stretch",
-          "items": [
-            {
-              "type": "TextBlock",
-              "text": "• **Alert Name:** @{split(triggerBody()?['text'] ?? '','alertname = ')[1]?split('\n')[0] ?? 'N/A'}",
-              "wrap": true,
-              "spacing": "Small"
-            },
-            {
-              "type": "TextBlock",
-              "text": "• **Severity:** @{split(triggerBody()?['text'] ?? '','severity = ')[1]?split('\n')[0] ?? 'N/A'}",
-              "wrap": true,
-              "spacing": "Small"
-            },
-            {
-              "type": "TextBlock",
-              "text": "• **Namespace:** @{split(triggerBody()?['text'] ?? '','namespace = ')[1]?split('\n')[0] ?? 'N/A'}",
-              "wrap": true,
-              "spacing": "Small"
-            }
-          ]
-        },
-        {
-          "type": "Column",
-          "width": "stretch",
-          "items": [
-            {
-              "type": "TextBlock",
-              "text": "• **Pod:** @{split(triggerBody()?['text'] ?? '','pod = ')[1]?split('\n')[0] ?? 'N/A'}",
-              "wrap": true,
-              "spacing": "Small"
-            },
-            {
-              "type": "TextBlock",
-              "text": "• **Team:** @{split(triggerBody()?['text'] ?? '','team = ')[1]?split('\n')[0] ?? 'N/A'}",
-              "wrap": true,
-              "spacing": "Small"
-            },
-            {
-              "type": "TextBlock",
-              "text": "• **Environment:** @{split(triggerBody()?['text'] ?? '','channel = ')[1]?split('\n')[0] ?? 'N/A'}",
-              "wrap": true,
-              "spacing": "Small"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "TextBlock",
-      "text": "**📝 Annotations:**",
-      "wrap": true,
-      "spacing": "Medium",
-      "weight": "Bolder"
-    },
-    {
-      "type": "TextBlock",
-      "text": "• **Dashboard:** @{triggerBody()?['annotations']?['dashboard_url'] ?? 'N/A'}",
+      "text": "**📊 Status:**\n@{triggerBody()?['status'] ?? 'FIRING'}",
       "wrap": true,
       "spacing": "Small"
     },
     {
       "type": "TextBlock",
-      "text": "• **Runbook:** @{triggerBody()?['annotations']?['runbook_url'] ?? 'N/A'}",
+      "text": "**🔍 Details:**\n"
+        + "• alertname = @{coalesce(split(triggerBody()?['text'], 'alertname = ')[1]?split('\n')[0], 'N/A')}\n"
+        + "• severity = @{coalesce(split(triggerBody()?['text'], 'severity = ')[1]?split('\n')[0], 'N/A')}\n"
+        + "• namespace = @{coalesce(split(triggerBody()?['text'], 'namespace = ')[1]?split('\n')[0], 'N/A')}\n"
+        + "• pod = @{coalesce(split(triggerBody()?['text'], 'pod = ')[1]?split('\n')[0], 'N/A')}\n"
+        + "• team = @{coalesce(split(triggerBody()?['text'], 'team = ')[1]?split('\n')[0], 'N/A')}\n"
+        + "• env = @{coalesce(split(triggerBody()?['text'], 'channel = ')[1]?split('\n')[0], 'N/A')}",
       "wrap": true,
       "spacing": "Small"
     },
     {
       "type": "TextBlock",
-      "text": "• **Description:** @{triggerBody()?['annotations']?['description'] ?? 'No description provided.'}",
+      "text": "**📝 Annotations:**\n"
+        + "• dashboard: @{triggerBody()?['annotations']?['dashboard_url'] ?? 'N/A'}\n"
+        + "• runbook: @{triggerBody()?['annotations']?['runbook_url'] ?? 'N/A'}\n"
+        + "• description: @{triggerBody()?['annotations']?['description'] ?? 'N/A'}",
       "wrap": true,
       "spacing": "Small"
     }
@@ -135,20 +70,17 @@
     {
       "type": "Action.OpenUrl",
       "title": "📘 Runbook",
-      "url": "@{triggerBody()?['annotations']?['runbook_url'] ?? ''}",
-      "isVisible": "${if(triggerBody()?['annotations']?['runbook_url'], true, false)}"
+      "url": "@{triggerBody()?['annotations']?['runbook_url'] ?? 'https://example.com'}"
     },
     {
       "type": "Action.OpenUrl",
       "title": "📊 Dashboard",
-      "url": "@{triggerBody()?['annotations']?['dashboard_url'] ?? ''}",
-      "isVisible": "${if(triggerBody()?['annotations']?['dashboard_url'], true, false)}"
+      "url": "@{triggerBody()?['annotations']?['dashboard_url'] ?? 'https://example.com'}"
     },
     {
       "type": "Action.OpenUrl",
       "title": "🔕 Silence",
-      "url": "@{if(contains(triggerBody()?['text'], 'Source:'), trim(split(triggerBody()?['text'], 'Source:')[1]), 'https://example.com')}",
-      "isVisible": "${if(contains(triggerBody()?['text'], 'Source:'), true, false)}"
+      "url": "@{if(contains(triggerBody()?['text'], 'Source:'), trim(split(triggerBody()?['text'], 'Source:')[1]), 'https://example.com')}"
     }
   ]
 }
