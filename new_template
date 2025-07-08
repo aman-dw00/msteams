@@ -13,8 +13,7 @@
     },
     {
       "type": "TextBlock",
-      "text": "🚨 **Alerts Summary**",
-      "wrap": true,
+      "text": "**Alerts Summary**",
       "weight": "Bolder",
       "size": "Medium",
       "spacing": "Medium",
@@ -22,27 +21,26 @@
     },
     {
       "type": "TextBlock",
-      "text": "${replace(replace(replace(text, '\nLabels:', '\n\n🔹 **Labels:**\n'), '\nAnnotations:', '\n\n📝 **Annotations:**\n'), '\nSource:', '\n\n🔗 **Source:** ')}",
+      "text": "${replace(replace(replace(text, '\\nLabels:', '\\n\\n* **Labels:**'), '\\nAnnotations:', '\\n\\n* **Annotations:**'), '\\nSource:', '\\n\\n* **Source:**')}",
       "wrap": true,
       "spacing": "Medium"
     },
     {
       "type": "TextBlock",
       "text": "**${count(split(text, 'Source:')) - 1} active alerts** found",
-      "wrap": true,
-      "spacing": "Medium",
-      "color": "attention"
+      "color": "attention",
+      "spacing": "Medium"
     }
   ],
   "actions": [
     {
       "type": "Action.OpenUrl",
-      "title": "📋 Open Primary Alert",
-      "url": "${if(count(split(text, 'Source:')) > 1, trim(split(text, 'Source:')[1]), 'https://grafana.example.com')}"
+      "title": "Open Primary Alert",
+      "url": "${if(greater(count(split(text, 'Source:')), 1, trim(split(text, 'Source:')[1]), 'https://grafana.example.com')}"
     },
     {
       "type": "Action.OpenUrl",
-      "title": "📋 Open Grafana Dashboard",
+      "title": "Open Grafana Dashboard",
       "url": "https://grafana.example.com/dashboards"
     }
   ]
