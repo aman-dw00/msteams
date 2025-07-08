@@ -30,27 +30,27 @@
   "actions": [
     {
       "type": "Action.OpenUrl",
-      "title": "🔗 View Alert 1",
-      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 1), split(triggerBody()?['text'], 'Source: ')[1], 'https://example.com')}",
-      "visible": "@{greater(length(split(triggerBody()?['text'], 'Source: ')), 1)}"
+      "title": "🔗 View All Alerts",
+      "url": "@{first(split(triggerBody()?['text'], 'Source: ')[1]}"
     },
     {
-      "type": "Action.OpenUrl",
-      "title": "🔗 View Alert 2",
-      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 2), split(triggerBody()?['text'], 'Source: ')[2], 'https://example.com')}",
-      "visible": "@{greater(length(split(triggerBody()?['text'], 'Source: ')), 2)}"
-    },
-    {
-      "type": "Action.OpenUrl",
-      "title": "🔗 View Alert 3",
-      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 3), split(triggerBody()?['text'], 'Source: ')[3], 'https://example.com')}",
-      "visible": "@{greater(length(split(triggerBody()?['text'], 'Source: ')), 3)}"
-    },
-    {
-      "type": "Action.OpenUrl",
-      "title": "🔗 View Alert 4",
-      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 4), split(triggerBody()?['text'], 'Source: ')[4], 'https://example.com')}",
-      "visible": "@{greater(length(split(triggerBody()?['text'], 'Source: ')), 4)}"
+      "type": "Action.ShowCard",
+      "title": "📌 Individual Alert Links",
+      "card": {
+        "type": "AdaptiveCard",
+        "body": [
+          {
+            "type": "TextBlock",
+            "text": "Select an alert to view:",
+            "weight": "Bolder"
+          }
+        ],
+        "actions": "@{replace(join(apply(split(triggerBody()?['text'], 'Source: '), (x, i) => if(greater(i, 0), createArray({
+          'type': 'Action.OpenUrl',
+          'title': concat('🔗 Alert ', i),
+          'url': x
+        }), null), ','), 'null,', '')}"
+      }
     }
   ]
 }
