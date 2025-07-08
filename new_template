@@ -5,29 +5,28 @@
   "body": [
     {
       "type": "TextBlock",
-      "text": "${title}",
+      "text": "${$data.title}",
       "weight": "Bolder",
       "size": "Large",
-      "color": "${if(contains(title, 'FIRING'), 'attention', if(contains(title, 'RESOLVED'), 'good', 'default'))}",
+      "color": "${if(contains($data.title, 'FIRING'), 'attention', if(contains($data.title, 'RESOLVED'), 'good', 'default'))}",
       "wrap": true
     },
     {
       "type": "TextBlock",
-      "text": "**Alerts Summary**",
+      "text": "🚨 **Alerts Summary**",
       "weight": "Bolder",
       "size": "Medium",
-      "spacing": "Medium",
-      "separator": true
+      "spacing": "Medium"
     },
     {
       "type": "TextBlock",
-      "text": "${replace(replace(replace(text, '\\nLabels:', '\\n\\n* **Labels:**'), '\\nAnnotations:', '\\n\\n* **Annotations:**'), '\\nSource:', '\\n\\n* **Source:**')}",
+      "text": "${replace(replace(replace($data.text, '\\nLabels:', '\\n\\n🔹 **Labels:**'), '\\nAnnotations:', '\\n\\n📝 **Annotations:**'), '\\nSource:', '\\n\\n🔗 **Source:**')}",
       "wrap": true,
       "spacing": "Medium"
     },
     {
       "type": "TextBlock",
-      "text": "**${count(split(text, 'Source:')) - 1} active alerts** found",
+      "text": "**${count(split($data.text, 'Source:')) - 1} active alerts** found",
       "color": "attention",
       "spacing": "Medium"
     }
@@ -35,12 +34,12 @@
   "actions": [
     {
       "type": "Action.OpenUrl",
-      "title": "Open Primary Alert",
-      "url": "${if(greater(count(split(text, 'Source:')), 1, trim(split(text, 'Source:')[1]), 'https://grafana.example.com')}"
+      "title": "🔗 Open Primary Alert",
+      "url": "${if(greater(count(split($data.text, 'Source:')), 1, trim(split($data.text, 'Source:')[1]), 'https://grafana.example.com')}"
     },
     {
       "type": "Action.OpenUrl",
-      "title": "Open Grafana Dashboard",
+      "title": "📋 Open Grafana Dashboard",
       "url": "https://grafana.example.com/dashboards"
     }
   ]
