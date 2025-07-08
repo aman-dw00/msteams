@@ -14,71 +14,44 @@
     },
     {
       "type": "TextBlock",
-      "text": "**🧾 Summary:**\n@{triggerBody()?['summary']}\n\n**📊 Status:**\n@{triggerBody()?['status']}",
+      "text": "**📄 Summary:**\n@{triggerBody()?['title']}",
       "wrap": true,
-      "spacing": "Medium",
-      "separator": true
+      "spacing": "Small"
     },
     {
       "type": "TextBlock",
-      "text": "**🔍 Details:**",
-      "weight": "Bolder",
-      "spacing": "Medium"
-    },
-    {
-      "type": "FactSet",
-      "facts": [
-        {
-          "title": "alertname",
-          "value": "@{triggerBody()?['alertname']}"
-        },
-        {
-          "title": "severity",
-          "value": "@{triggerBody()?['severity']}"
-        },
-        {
-          "title": "namespace",
-          "value": "@{triggerBody()?['namespace']}"
-        },
-        {
-          "title": "pod",
-          "value": "@{triggerBody()?['pod']}"
-        },
-        {
-          "title": "team",
-          "value": "@{triggerBody()?['team']}"
-        },
-        {
-          "title": "env",
-          "value": "@{triggerBody()?['env']}"
-        }
-      ]
+      "text": "**📊 Status:** FIRING",
+      "wrap": true,
+      "spacing": "Small"
     },
     {
       "type": "TextBlock",
-      "text": "**📎 Annotations:**\n• dashboard: @{triggerBody()?['dashboard_url']}\n• runbook: @{triggerBody()?['runbook_url']}\n• description: @{triggerBody()?['description']}",
+      "text": "**🔍 Details:**\n• alertname = @{split(triggerBody()?['text'], 'alertname = ')[1]?split('\n')[0]}\n• severity = @{split(triggerBody()?['text'], 'severity = ')[1]?split('\n')[0]}\n• namespace = @{split(triggerBody()?['text'], 'namespace = ')[1]?split('\n')[0]}\n• pod = @{split(triggerBody()?['text'], 'pod = ')[1]?split('\n')[0]}\n• team = @{split(triggerBody()?['text'], 'team = ')[1]?split('\n')[0]}\n• env = @{split(triggerBody()?['text'], 'channel = ')[1]?split('\n')[0]}",
       "wrap": true,
-      "spacing": "Medium"
+      "spacing": "Small"
+    },
+    {
+      "type": "TextBlock",
+      "text": "**📝 Annotations:**\n• dashboard: @{triggerBody()?['annotations']?['dashboard_url']}\n• runbook: @{triggerBody()?['annotations']?['runbook_url']}\n• description: @{triggerBody()?['annotations']?['description']}",
+      "wrap": true,
+      "spacing": "Small"
     }
   ],
   "actions": [
     {
       "type": "Action.OpenUrl",
       "title": "📘 Runbook",
-      "url": "@{triggerBody()?['runbook_url']}",
-      "style": "default"
+      "url": "@{triggerBody()?['annotations']?['runbook_url']}"
     },
     {
       "type": "Action.OpenUrl",
       "title": "📊 Dashboard",
-      "url": "@{triggerBody()?['dashboard_url']}",
-      "style": "positive"
+      "url": "@{triggerBody()?['annotations']?['dashboard_url']}"
     },
     {
       "type": "Action.OpenUrl",
       "title": "🔕 Silence",
-      "url": "@{triggerBody()?['silence_url']}",
-      "style": "destructive"
+      "url": "@{if(contains(triggerBody()?['text'], 'Source:'), trim(split(triggerBody()?['text'], 'Source:')[1]), 'https://example.com')}"
     }
   ]
 }
