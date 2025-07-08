@@ -55,3 +55,65 @@
     }
   ]
 }
+
+
+
+
+
+
+------------------
+
+
+
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.4",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "@{triggerBody()?['title']}",
+      "weight": "Bolder",
+      "size": "Large",
+      "color": "@{if(contains(triggerBody()?['title'], 'FIRING'), 'attention', if(contains(triggerBody()?['title'], 'RESOLVED'), 'good', 'default'))}",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "🚨 **Alerts Summary**",
+      "wrap": true,
+      "weight": "Bolder",
+      "size": "Medium",
+      "spacing": "Medium",
+      "separator": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "@{replace(replace(replace(triggerBody()?['text'], '\nLabels:', '\n\n🔹 **Labels:**\n'), '\nAnnotations:', '\n\n📝 **Annotations:**\n'), '\nSource:', '\n\n🔗 **Source:** ')}",
+      "wrap": true,
+      "spacing": "Medium"
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.OpenUrl",
+      "title": "🔗 View Alert 1",
+      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 1), split(triggerBody()?['text'], 'Source: ')[1], 'https://example.com')}"
+    },
+    {
+      "type": "Action.OpenUrl",
+      "title": "🔗 View Alert 2",
+      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 2), split(triggerBody()?['text'], 'Source: ')[2], 'https://example.com')}"
+    },
+    {
+      "type": "Action.OpenUrl",
+      "title": "🔗 View Alert 3",
+      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 3), split(triggerBody()?['text'], 'Source: ')[3], 'https://example.com')}"
+    },
+    {
+      "type": "Action.OpenUrl",
+      "title": "🔗 View Alert 4",
+      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 4), split(triggerBody()?['text'], 'Source: ')[4], 'https://example.com')}"
+    }
+  ]
+}
