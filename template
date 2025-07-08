@@ -299,3 +299,80 @@
     }
   ]
 }
+
+
+------------------------------------------
+
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.4",
+  "body": [
+    {
+      // Dynamic Title with Severity Emoji and Color
+      "type": "TextBlock",
+      "text": "@{if(contains(triggerBody()?['title'], 'FIRING'), if(contains(triggerBody()?['title'], 'critical'), '🔥', if(contains(triggerBody()?['title'], 'warning'), '⚠️', '💡')), '')} @{triggerBody()?['title']}",
+      "weight": "Bolder",
+      "size": "Large",
+      "color": "@{if(contains(triggerBody()?['title'], 'FIRING'), 'Attention', if(contains(triggerBody()?['title'], 'RESOLVED'), 'Good', 'Default'))}",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "🚨 **Alerts Summary**",
+      "wrap": true,
+      "weight": "Bolder",
+      "size": "Medium",
+      "spacing": "Medium",
+      "separator": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "Alerts Firing:", // As seen in your Slack screenshot
+      "wrap": true,
+      "weight": "Bolder",
+      "size": "Small",
+      "spacing": "Default"
+    },
+    {
+      // This TextBlock will display the full parsed text from triggerBody()['text']
+      // with improved formatting using replace functions.
+      "type": "TextBlock",
+      "text": "@{replace(replace(replace(triggerBody()?['text'], '\nLabels:', '\n\n🔹 **Labels:**\n'), '\nAnnotations:', '\n\n📝 **Annotations:**\n'), '\nSource:', '\n\n🔗 **Source:** ')}",
+      "wrap": true,
+      "spacing": "Medium"
+    }
+  ],
+  "actions": [
+    {
+      // Button for Dashboard URL
+      "type": "Action.OpenUrl",
+      "title": "📊 View Dashboard",
+      "url": "@{
+        if(contains(triggerBody()?['text'], 'dashboard_url = '),
+           split(split(triggerBody()?['text'], 'dashboard_url = ')[1], '\n')[0],
+           'https://example.com' // Fallback URL if not found
+        )
+      }"
+    },
+    {
+      // Button for Runbook URL
+      "type": "Action.OpenUrl",
+      "title": "📖 View Runbook",
+      "url": "@{
+        if(contains(triggerBody()?['text'], 'runbook_url = '),
+           split(split(triggerBody()?['text'], 'runbook_url = ')[1], '\n')[0],
+           'https://example.com' // Fallback URL if not found
+        )
+      }"
+    },
+    {
+      // General "View Alert" button, fallback if specific URLs aren't found or as an extra option
+      // This will use the "Source:" URL if present
+      "type": "Action.OpenUrl",
+      "title": "🔗 View All Details",
+      "url": "@{if(greater(length(split(triggerBody()?['text'], 'Source: ')), 1), split(triggerBody()?['text'], 'Source: ')[1], 'https://example.com')}"
+    }
+  ]
+}
+
