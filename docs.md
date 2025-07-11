@@ -11,8 +11,8 @@ Before starting the deployment, make sure the following requirements are fulfill
 
 ###  😀Access
 
-* GitHub access to: [o11y-k8s-setup-template](https://github.com/ot-client/o11y-k8s-setup-template.git) repo
-* [Jenkins](https://jenkins.opstree.dev/) access to trigger jobs
+* GitHub access to: [o11y-k8s-setup-template](https://github.com/ot-client/o11y-k8s-setup-template.git) repo.
+* [Jenkins](https://jenkins.opstree.dev/) access to trigger jobs.
 * Access to target Kubernetes cluster.
 
 ### 🛠️Tools installed 
@@ -268,14 +268,23 @@ Grafana is the central dashboarding tool.
    ```javascript
    grafana.k8s.opstree.dev
    ```
-3. Grafana user is **admin** and you can get grafana password from secrets:
 
-   ```javascript
-   kubectl get secrets grafana -n monitoring -o yaml
-   ```
-4. The password will be in base64 encoded , decode the password  open [decode](https://www.base64decode.org/) site on browser and login with the user and password on grafana.
+3\.Grafana user is **admin** and you can get grafana password from secrets:
 
-   
+```javascript
+kubectl get secrets grafana -n monitoring -o yaml
+```
+
+The password will be in base64 encoded , decode the password  open [decode](https://www.base64decode.org/) site on browser and login with the user and password on grafana.
+
+
+4\.To edit the grafana password if required with below command:
+
+```javascript
+kubectl edit secret grafana -n monitoring -o yaml 
+```
+
+Convert your required password in base64encoded form and add in the yaml.
 
 
 ---
@@ -285,7 +294,7 @@ Grafana is the central dashboarding tool.
 
 ###  Purpose
 
-Configures datasources (VictoriaMetrics, Loki, Tempo).
+Configures datasources (VictoriaMetrics, Loki, Tempo, alertmanager).
 
 ###  Chart Path:
 
@@ -393,7 +402,7 @@ Also, validate that the required **metrics**, **logs**, and **traces** are avail
 
 ## ✅ Troubleshooting
 
-* Try to Run Jobs in the same Sequence as given above.
+* Try to Run Jobs in the same Sequence as given above. or if required you can run victoriametrics, tempo , loki , otel-operator, otel-collector, grafana  in parallel then run the remaining jobs alertmanager, alertingrules, blackbox exporter, endpoint, datasource, dashboards.
 
 
 * If a job got failed Check console output of that job.
@@ -410,3 +419,4 @@ Also, validate that the required **metrics**, **logs**, and **traces** are avail
 * While making changes to the values.yaml file, ensure that the **indentation is correct**, as improper indentation can lead to Helm deployment failures.
 
 
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
