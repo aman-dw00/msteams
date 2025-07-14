@@ -1,0 +1,832 @@
+# BEGIN ANSIBLE MANAGED BLOCK
+exporters:
+  prometheusremotewrite:
+    endpoint: ${env:VICTORIAMETRICS_REMOTE_WRITE_ENDPOINT}
+    export_created_metric:
+      enabled: true
+    max_batch_size_bytes: 8192
+    remote_write_queue:
+      enabled: true
+      num_consumers: 100
+      queue_size: 100000
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_elapsed_time: 300s
+      max_interval: 30s
+    timeout: 300s
+    tls:
+      insecure_skip_verify: true
+
+processors:
+  batch:
+    send_batch_max_size: 8192
+    send_batch_size: 1024
+    timeout: 60s
+  memory_limiter:
+    check_interval: 10s
+    limit_percentage: 75
+    spike_limit_percentage: 50
+  attributes/insert:
+    actions:
+      - key: env
+        action: insert
+        value: ${env:ENV}
+      - key: host.name
+        action: insert
+        value: ${env:HOST_NAME}
+      - key: private.ip
+        action: insert
+        value: ${env:HOST_PRIVATE_IP}
+      - key: site.name
+        action: insert
+        value: ${env:SITE_NAME}
+
+  attributes/redis1:
+    actions:
+      - key: redis.instance
+        value: redis-6680
+        action: insert
+      - key: otel
+        value: redis
+        action: insert
+      - key: redis.hostname
+        action: insert
+        value: "10.143.228.31"
+
+  attributes/redis2:
+    actions:
+      - key: redis.instance
+        value: redis-6681
+        action: insert
+      - key: otel
+        value: redis
+        action: insert
+      - key: redis.hostname
+        action: insert
+        value: "10.143.228.31"
+
+  attributes/redis3:
+    actions:
+      - key: redis.instance
+        value: redis-6682
+        action: insert
+      - key: otel
+        value: redis
+        action: insert
+      - key: redis.hostname
+        action: insert
+        value: "10.143.228.31"
+
+  attributes/HTTPD-APP01-A:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP01-A
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+  attributes/HTTPD-APP01-B:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP01-B
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+
+  attributes/HTTPD-APP02-A:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP02-A
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+  attributes/HTTPD-APP02-B:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP02-B
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+
+  attributes/HTTPD-APP03-A:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP03-A
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+
+  attributes/HTTPD-APP03-B:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP03-B
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+
+  attributes/HTTPD-APP04-A:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP04-A
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+
+  attributes/HTTPD-APP04-B:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP04-B
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+
+  attributes/HTTPD-APP05-A:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP05-A
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+
+  attributes/HTTPD-APP05-B:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP05-B
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+
+  attributes/HTTPD-APP06-A:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP06-A
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+  
+  attributes/HTTPD-APP06-B:
+    actions:
+      - key: apache.instance
+        value: HTTPD-APP06-B
+        action: insert
+      - key: otel
+        value: apache
+        action: insert
+
+  resource/activemq-be-1:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: activemq-be-1
+      - action: upsert
+        key: service.namespace
+        value: activemq  
+
+  resource/activemq-be-2:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: activemq-be-2
+      - action: upsert
+        key: service.namespace
+        value: activemq
+
+  resource/activemq-if-1:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: activemq-if-1
+      - action: upsert
+        key: service.namespace
+        value: activemq
+  
+  resource/activemq-if-2:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: activemq-if-2
+      - action: upsert
+        key: service.namespace
+        value: activemq
+  
+  resource/activemq-fe-np-1:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: activemq-fe-np-1
+      - action: upsert
+        key: service.namespace
+        value: activemq
+  
+  resource/activemq-fe-np-2:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: activemq-fe-np-2
+      - action: upsert
+        key: service.namespace
+        value: activemq
+  
+  resource/activemq-fe-ps-1:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: activemq-fe-ps-1
+      - action: upsert
+        key: service.namespace
+        value: activemq
+  
+  resource/activemq-fe-ps-2:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: activemq-fe-ps-2
+      - action: upsert
+        key: service.namespace
+        value: activemq
+  
+  resource/zara-combine-1a:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: 10.143.228.31
+      - action: upsert
+        key: service.namespace
+        value: zara-combine-1a
+
+  resource/zara-ui-1a:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: 10.143.228.31
+      - action: upsert
+        key: service.namespace
+        value: zara-ui-1a
+
+  resource/zara-combine-2a:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: 10.143.228.33
+      - action: upsert
+        key: service.namespace
+        value: zara-combine-2a
+
+  resource/zara-ui-2a:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: 10.143.228.33
+      - action: upsert
+        key: service.namespace
+        value: zara-ui-2a
+
+  resource/zara-combine-1b:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: 10.143.228.32
+      - action: upsert
+        key: service.namespace
+        value: zara-combine-1b
+
+  resource/zara-ui-1b:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: 10.143.228.32
+      - action: upsert
+        key: service.namespace
+        value: zara-ui-1b
+
+  resource/zara-combine-2b:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: 10.143.228.34
+      - action: upsert
+        key: service.namespace
+        value: zara-combine-2b
+
+  resource/zara-ui-2b:
+    attributes:
+      - action: upsert
+        key: service.name
+        value: 10.143.228.34
+      - action: upsert
+        key: service.namespace
+        value: zara-ui-2b
+
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: otel-collector-metrics
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['127.0.0.1:8888']
+
+  redis/redis1:
+    endpoint: "10.143.228.31:6680"
+    collection_interval: 10s
+    password: "Welcome@1"
+
+  redis/redis2:
+    endpoint: "10.143.228.31:6681"
+    collection_interval: 10s
+    password: "Welcome@1"
+  
+  redis/redis3:
+    endpoint: "10.143.228.31:6682"
+    collection_interval: 10s
+    password: "Welcome@1"
+  
+  apache/HTTPD-APP01-A:
+    endpoint: "http://10.143.228.31/server-status?auto"
+    collection_interval: 10s
+  apache/HTTPD-APP01-B:
+    endpoint: "http://10.143.228.32/server-status?auto"
+    collection_interval: 10s
+  apache/HTTPD-APP02-A:
+    endpoint: "http://10.143.228.33/server-status?auto"
+    collection_interval: 10s
+  apache/HTTPD-APP02-B:
+    endpoint: "http://10.143.228.34/server-status?auto"
+    collection_interval: 10s              
+  apache/HTTPD-APP03-A:
+    endpoint: "http://10.143.228.35/server-status?auto"
+    collection_interval: 10s
+  apache/HTTPD-APP03-B:
+    endpoint: "http://10.143.228.36/server-status?auto"
+    collection_interval: 10s
+  apache/HTTPD-APP04-A:
+    endpoint: "http://10.143.228.37/server-status?auto"
+    collection_interval: 10s
+  apache/HTTPD-APP04-B:
+    endpoint: "http://10.143.228.38/server-status?auto"
+    collection_interval: 10s              
+  apache/HTTPD-APP05-A:
+    endpoint: "http://10.143.228.39/server-status?auto"
+    collection_interval: 10s
+  apache/HTTPD-APP05-B:
+    endpoint: "http://10.143.228.41/server-status?auto"
+    collection_interval: 10s
+  apache/HTTPD-APP06-A:
+    endpoint: "http://10.143.228.42/server-status?auto"
+    collection_interval: 10s
+  apache/HTTPD-APP06-B:
+    endpoint: "http://10.143.228.43/server-status?auto"
+    collection_interval: 10s
+  jmx/activemq-be-1:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: activemq,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.33:14116/jmxrmi
+    collection_interval: 30s
+
+  jmx/activemq-be-2:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: activemq,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.34:14126/jmxrmi
+    collection_interval: 30s
+  
+  jmx/activemq-if-1:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: activemq,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.33:13116/jmxrmi
+    collection_interval: 30s
+
+  jmx/activemq-if-2:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: activemq,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.34:13126/jmxrmi
+    collection_interval: 30s
+
+  jmx/activemq-fe-np-1:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: activemq,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.42:13303/jmxrmi
+    collection_interval: 30s
+
+  jmx/activemq-fe-np-2:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: activemq,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.43:13308/jmxrmi
+    collection_interval: 30s
+  
+  jmx/activemq-fe-ps-1:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: activemq,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.42:13313/jmxrmi
+    collection_interval: 30s
+
+  jmx/activemq-fe-ps-2:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: activemq,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.43:13318/jmxrmi
+    collection_interval: 30s
+
+  jmx/zara-combine-1a:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: tomcat,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.31:9011/jmxrmi
+    collection_interval: 30s
+
+  jmx/zara-combine-2a:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: tomcat,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.33:9011/jmxrmi
+    collection_interval: 30s
+
+  jmx/zara-ui-1a:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: tomcat,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.31:9012/jmxrmi
+    collection_interval: 30s
+
+  jmx/zara-ui-2a:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: tomcat,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.33:9012/jmxrmi
+    collection_interval: 30s
+
+  jmx/zara-combine-1b:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: tomcat,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.32:9011/jmxrmi
+    collection_interval: 30s
+
+  jmx/zara-combine-2b:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: tomcat,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.34:9011/jmxrmi
+    collection_interval: 30s
+
+  jmx/zara-ui-1b:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: tomcat,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.32:9012/jmxrmi
+    collection_interval: 30s
+
+  jmx/zara-ui-2b:
+    jar_path: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    target_system: tomcat,jvm
+    endpoint: service:jmx:rmi:///jndi/rmi://10.143.228.34:9012/jmxrmi
+    collection_interval: 30s
+service:
+  pipelines:
+    metrics/redis1:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/redis1
+      receivers:
+        - prometheus
+        - redis/redis1
+
+    metrics/redis2:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/redis2
+      receivers:
+        - prometheus
+        - redis/redis2
+
+    metrics/redis3:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/redis3
+      receivers:
+        - prometheus
+        - redis/redis3
+    
+    metrics/HTTPD-APP01-A:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP01-A
+      receivers:
+        - apache/HTTPD-APP01-A
+    
+    metrics/HTTPD-APP01-B:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP01-B
+      receivers:
+        - apache/HTTPD-APP01-B
+    metrics/HTTPD-APP02-A:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP02-A
+      receivers:
+        - apache/HTTPD-APP02-A
+
+    metrics/HTTPD-APP02-B:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP02-B
+      receivers:
+        - apache/HTTPD-APP02-B
+    metrics/HTTPD-APP03-A:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP03-A
+      receivers:
+        - apache/HTTPD-APP03-A
+
+    metrics/HTTPD-APP03-B:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP03-B
+      receivers:
+        - apache/HTTPD-APP03-B
+
+    metrics/HTTPD-APP04-A:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP04-A
+      receivers:
+        - apache/HTTPD-APP04-A
+
+    metrics/HTTPD-APP04-B:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP04-A
+      receivers:
+        - apache/HTTPD-APP04-B
+    
+    metrics/HTTPD-APP05-A:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP05-A
+      receivers:
+        - apache/HTTPD-APP05-A
+
+    metrics/HTTPD-APP05-B:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP05-B
+      receivers:
+        - apache/HTTPD-APP05-B
+
+    metrics/HTTPD-APP06-A:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP06-A
+      receivers:
+        - apache/HTTPD-APP06-A
+    
+    metrics/HTTPD-APP06-B:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - attributes/HTTPD-APP06-B
+      receivers:
+        - apache/HTTPD-APP06-B
+    metrics/activemq-be-1:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/activemq-be-1
+      receivers:
+        - jmx/activemq-be-1
+
+    metrics/activemq-be-2:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/activemq-be-2
+      receivers:
+        - jmx/activemq-be-2
+    
+    metrics/activemq-if-1:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/activemq-if-1
+      receivers:
+        - jmx/activemq-if-1
+
+    metrics/activemq-if-2:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/activemq-if-2
+      receivers:
+        - jmx/activemq-if-2
+
+    metrics/activemq-fe-np-1:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/activemq-fe-np-1
+      receivers:
+        - jmx/activemq-fe-np-1
+
+    metrics/activemq-fe-np-2:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/activemq-fe-np-2
+      receivers:
+        - jmx/activemq-fe-np-2
+
+    metrics/activemq-fe-ps-1:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/activemq-fe-ps-1
+      receivers:
+        - jmx/activemq-fe-ps-1
+
+    metrics/activemq-fe-ps-2:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/activemq-fe-ps-2
+      receivers:
+        - jmx/activemq-fe-ps-2
+    
+    metrics/zara-combine-1a:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/zara-combine-1a
+      receivers:
+        - jmx/zara-combine-1a
+
+    metrics/zara-combine-2a:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/zara-combine-2a
+      receivers:
+        - jmx/zara-combine-2a
+    
+    metrics/zara-ui-1a:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/zara-ui-1a
+      receivers:
+        - jmx/zara-ui-1a
+
+    metrics/zara-ui-2a:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/zara-ui-2a
+      receivers:
+        - jmx/zara-ui-2a
+    
+    metrics/zara-combine-1b:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/zara-combine-1b
+      receivers:
+        - jmx/zara-combine-1b
+
+    metrics/zara-combine-2b:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/zara-combine-2b
+      receivers:
+        - jmx/zara-combine-2b
+    
+    metrics/zara-ui-1b:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/zara-ui-1b
+      receivers:
+        - jmx/zara-ui-1b
+
+    metrics/zara-ui-2b:
+      exporters:
+        - prometheusremotewrite
+      processors:
+        - memory_limiter
+        - batch
+        - attributes/insert
+        - resource/zara-ui-2b
+      receivers:
+        - jmx/zara-ui-2b
+  telemetry:
+    metrics:
+      address: 127.0.0.1:8888
+      level: detailed
+# END ANSIBLE MANAGED BLOCK
