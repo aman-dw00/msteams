@@ -1,0 +1,9 @@
+<buffer>
+  @type memory
+  flush_interval 10s
+  flush_at_shutdown true
+  chunk_limit_size 1MB
+  queued_chunks_limit_size 256
+  total_limit_size 512MB
+  overflow_action block
+</buffer>
