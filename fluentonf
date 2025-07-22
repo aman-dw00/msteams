@@ -1,9 +1,16 @@
 <buffer>
   @type memory
+  flush_mode interval       # Critical for time-based flushing
   flush_interval 10s
   flush_at_shutdown true
-  chunk_limit_size 1MB
-  queued_chunks_limit_size 256
+  chunk_limit_size 1.5MB    # Better for Loki's API
+  queued_chunks_limit_size 64
   total_limit_size 512MB
-  overflow_action block
+  overflow_action block     # Safe but monitor for blocking
+  
+  # Retry logic for reliability
+  retry_type exponential_backoff
+  retry_timeout 24h
+  retry_max_interval 60s
+  retry_forever true
 </buffer>
