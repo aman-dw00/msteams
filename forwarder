@@ -1,0 +1,53 @@
+<source>
+  @type forward                    # Input plugin for Fluentd-to-Fluentd communication
+  port 24224                       # Standard Fluentd forwarding port
+  bind 0.0.0.0                     # Listen on all network interfaces
+</source>
+
+<match sample.log>                 # Matches logs with tag 'sample.log'
+  @type loki                       # Loki output plugin
+  url http://loki:3100             # Loki server endpoint
+
+  <label>
+    host                      
+    tag                      
+    fluentd_worker 
+    stream_id               
+  </label>
+
+  <buffer>
+    @type memory                   # High-performance in-memory buffer
+    flush_interval 5s              # Max time between flushes (5 seconds)
+    chunk_limit_size 5m            # 5MB max per chunk
+    total_limit_size 500m          # Hard memory limit (500MB)
+    retry_forever true             # Infinite retries for failed deliveries
+    overflow_action block          # Pauses ingestion when buffer is full
+    retry_max_interval 30s         # Maximum delay between retries
+    retry_timeout 24h              # Total time to keep retrying
+  </buffer>
+</match>
+
+<match sample.json>
+  @type loki
+  url http://loki:3100
+
+  <label>
+    host
+    tag
+    fluentd_worker
+    stream_id
+    level             # <-- Optional: your JSON log may have `level` field
+    user              # <-- Optional: include any important JSON fields
+  </label>
+
+  <buffer>
+    @type memory
+    flush_interval 5s
+    chunk_limit_size 5m
+    total_limit_size 500m
+    retry_forever true
+    overflow_action block
+    retry_max_interval 30s
+    retry_timeout 24h
+  </buffer>
+</match>
